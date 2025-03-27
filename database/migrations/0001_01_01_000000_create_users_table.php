@@ -3,7 +3,10 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
+use App\Models\User;
 return new class extends Migration
 {
     /**
@@ -11,12 +14,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
+            $table->id('user_id');
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('extension_name')->nullable();
             $table->string('email')->unique();
+            $table->string('phone_number')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->mediumText('id_card')->nullable();
+            $table->enum('gender',['male','female'])->nullable();
+            $table->enum('status',['active','inactive','pending','rejected'])->default('pending');
+            $table->enum('role',['superadmin','admin','staff','user','student','farmer','developer'])->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -35,6 +46,22 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+
+         $admin1 = new User([
+            'user_id' => 1,
+            'first_name' => 'Admin',
+            'last_name' => 'Admin',
+            'email' => 'superadmin@gmail.com',
+            'password' => Hash::make('150169226'),
+            'status'=> 'active',
+            'role'=>'superadmin',
+            'phone_number'=> '09641732812',
+            'gender' => 'male',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        $admin1->save();
     }
 
     /**

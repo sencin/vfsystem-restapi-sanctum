@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "202d8fdc37173d0210817162681b9a3b",
+    "content-hash": "32840840de538a0867827f99f13a96d4",
     "packages": [
         {
             "name": "brick/math",
@@ -2635,85 +2635,6 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v5.4.0"
             },
             "time": "2024-12-30T11:07:19+00:00"
-        },
-        {
-            "name": "ntanduy/cloudflare-d1-database",
-            "version": "v0.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/TanDuy03/cloudflare-d1-database.git",
-                "reference": "b54a082fbb48c4f05e9099ef3968b890ef39a313"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/TanDuy03/cloudflare-d1-database/zipball/b54a082fbb48c4f05e9099ef3968b890ef39a313",
-                "reference": "b54a082fbb48c4f05e9099ef3968b890ef39a313",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/dbal": "^3.0|^4.0",
-                "illuminate/cache": "*",
-                "illuminate/contracts": "*",
-                "illuminate/database": "*",
-                "illuminate/http": "*",
-                "php": "^8.2",
-                "saloonphp/laravel-http-sender": "^2.0|^3.0",
-                "saloonphp/laravel-plugin": "^3.5",
-                "saloonphp/saloon": "^3.10"
-            },
-            "require-dev": {
-                "laravel/legacy-factories": "^1.4",
-                "mockery/mockery": "^1.6",
-                "orchestra/testbench": "^9.3",
-                "pestphp/pest": "^2.35"
-            },
-            "suggest": {
-                "ext-pdo": "Extending the PDO driver for Cloudflare D1 is requireds."
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Ntanduy\\CFD1\\D1ServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Ntanduy\\CFD1\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "TanDuy03",
-                    "email": "ng.tanduy261203@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Easy configuration and setup for D1 Database connections in Laravel.",
-            "homepage": "https://github.com/TanDuy03/cloudflare-d1-database",
-            "keywords": [
-                "TanDuy03",
-                "cloudflare",
-                "d1",
-                "database",
-                "laravel"
-            ],
-            "support": {
-                "issues": "https://github.com/TanDuy03/cloudflare-d1-database/issues",
-                "source": "https://github.com/TanDuy03/cloudflare-d1-database/tree/v0.2.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/TanDuy03",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-11-05T05:59:30+00:00"
         },
         {
             "name": "nunomaduro/termwind",
@@ -6327,6 +6248,85 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "zyna/l1",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sencin/l1.git",
+                "reference": "f6b17f7dd2b8f41fee4f019b166788bf0b3d8156"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sencin/l1/zipball/f6b17f7dd2b8f41fee4f019b166788bf0b3d8156",
+                "reference": "f6b17f7dd2b8f41fee4f019b166788bf0b3d8156",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "^3.0|^4.0",
+                "illuminate/cache": "*",
+                "illuminate/contracts": "*",
+                "illuminate/database": "*",
+                "illuminate/http": "*",
+                "php": "^8.2",
+                "saloonphp/laravel-http-sender": "^2.0|^3.0",
+                "saloonphp/laravel-plugin": "^3.5",
+                "saloonphp/saloon": "^3.10"
+            },
+            "require-dev": {
+                "laravel/legacy-factories": "^1.4",
+                "mockery/mockery": "^1.6",
+                "orchestra/testbench": "^9.3",
+                "pestphp/pest": "^2.35"
+            },
+            "suggest": {
+                "ext-pdo": "Extending the PDO driver for Cloudflare D1 is requireds."
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Zyna\\CFD1\\D1ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zyna\\CFD1\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Zyna",
+                    "email": "example@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This is a forked package from Ntanduy and renoki-co, I plan to maintain this to future laravel version. a Star ⭐⭐⭐⭐ would be enough as a motivation and encouragement for me to continue maintaining this package",
+            "homepage": "https://github.com/sencin/d1",
+            "keywords": [
+                "Zyna",
+                "cloudflare",
+                "d1",
+                "database",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/sencin/l1/issues",
+                "source": "https://github.com/sencin/l1/tree/v1.0.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sencin",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-03-21T11:15:16+00:00"
         }
     ],
     "packages-dev": [
