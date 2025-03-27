@@ -9,7 +9,6 @@ use App\Http\Controllers\Api\TowerController;
 use App\Http\Controllers\Web\PlantTransplantController;
 use App\Http\Controllers\Web\UserAuth;
 use App\Http\Controllers\Web\UserController;
-
 Route::middleware('auth:sanctum')->group(function(){
 
     Route::apiResources([
@@ -38,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function(){
 Route::get('/availabletowers', [TowerController::class, 'showAllTowers']);
 
 Route::get('/user', function (Request $request) {
+    logger('Bearer Token:', ['token' => $request->bearerToken()]);
     return $request->user();
 })->middleware('auth:sanctum');
 
