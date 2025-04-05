@@ -11,6 +11,7 @@ services:
       - .:/var/www/html
     environment:
       - APP_KEY=base64:RFVf1RHhi38ZVV+I/yf4hhrhnQFbEDlkUXDxNeALiE8=
+      - APP_DEBUG=true
       - DB_CONNECTION=pgsql
       - DB_HOST=aws-0-ap-northeast-1.pooler.supabase.com
       - DB_PORT=6543
