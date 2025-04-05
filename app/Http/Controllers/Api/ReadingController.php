@@ -62,33 +62,36 @@ class ReadingController extends Controller{
         $startDate = $request->query('start_date', '2025-01-01'); // Default start date
         $endDate = $request->query('end_date', '2025-01-21'); // Default end date
 
-        // Raw query to calculate average readings
+        // Query to calculate daily average per sensor
         $results = DB::select("
-        SELECT
-            DATE(record_date) AS reading_date,
-            sensor_id,
-            AVG(reading_value) AS avg_reading
-        FROM readings
-        WHERE record_date BETWEEN ? AND ?
-        GROUP BY reading_date, sensor_id
-        ORDER BY reading_date ASC
-    ", [$startDate, $endDate]);
-    $sensorNames = [
-        1 => 'Humidity_DHT11',
-        2 => 'Temperature_DHT11',
-        3 => 'TSL2561_Luminosity',
-        4 => 'TDS_Meter',
-        5 => 'Analog_PH',
-    ];
+            SELECT
+                DATE(record_date) AS reading_date,
+                sensor_id,
+                ROUND(AVG(reading_value), 2) AS avg_reading
+            FROM readings
+            WHERE record_date BETWEEN ? AND ?
+            GROUP BY reading_date, sensor_id
+            ORDER BY reading_date ASC
+        ", [$startDate, $endDate]);
 
-    $formattedResults = array_map(function ($result) use ($sensorNames) {
-        return [
-            'reading_date' => $result->reading_date,
-            'sensor_name' => $sensorNames[$result->sensor_id] ?? 'Unknown Sensor',
-            'avg_reading' => $result->avg_reading,
+        // ✅ Corrected sensor mappings
+        $sensorNames = [
+            1 => 'Temperature_DHT11',
+            2 => 'Humidity_DHT11',
+            3 => 'Analog_PH',        // ✅ Now correctly mapped
+            4 => 'TDS_Meter',        // ✅ Now correctly mapped
+            5 => 'TSL2561_Luminosity', // ✅ Correct Luminosity mapping
         ];
-    }, $results);
 
-    return response()->json($formattedResults);
+        // Format results
+        $formattedResults = array_map(function ($result) use ($sensorNames) {
+            return [
+                'reading_date' => $result->reading_date,
+                'sensor_name' => $sensorNames[$result->sensor_id] ?? 'Unknown Sensor',
+                'avg_reading' => $result->avg_reading,
+            ];
+        }, $results);
+
+        return response()->json($formattedResults);
     }
 }
