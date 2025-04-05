@@ -40,6 +40,12 @@ RUN chown -R www-data:www-data /var/www/html
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     echo "DirectoryIndex index.php index.html" >> /etc/apache2/apache2.conf
 
+# Allow Apache to access the files
+RUN echo '<Directory /var/www/html>' >> /etc/apache2/apache2.conf && \
+    echo '    AllowOverride All' >> /etc/apache2/apache2.conf && \
+    echo '    Require all granted' >> /etc/apache2/apache2.conf && \
+    echo '</Directory>' >> /etc/apache2/apache2.conf
+
 # Expose port 80 for the web server
 EXPOSE 80
 
