@@ -37,7 +37,6 @@ Route::middleware('auth:sanctum')->group(function(){
 Route::get('/availabletowers', [TowerController::class, 'showAllTowers']);
 
 Route::get('/user', function (Request $request) {
-    logger('Bearer Token:', ['token' => $request->bearerToken()]);
     return $request->user();
 })->middleware('auth:sanctum');
 
