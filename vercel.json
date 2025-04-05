@@ -5,12 +5,9 @@
     ],
     "functions": {
         "api/index.php": {
-          "runtime": "vercel-php@0.7.3",
-          "extensions": [
-            "pgsql"
-          ]
+            "runtime": "vercel-php@0.7.3"
         }
-     },
+    },
     "routes": [
         {
             "src": "/build/(.*)",
