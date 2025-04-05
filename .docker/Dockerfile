@@ -36,6 +36,10 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Set the correct permissions for the entire project
 RUN chown -R www-data:www-data /var/www/html
 
+# Update Apache configuration to set ServerName and DirectoryIndex
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
+    echo "DirectoryIndex index.php index.html" >> /etc/apache2/apache2.conf
+
 # Expose port 80 for the web server
 EXPOSE 80
 
