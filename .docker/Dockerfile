@@ -1,29 +1,29 @@
-# Use an official PHP image with Apache
-FROM php:8.1-apache
+# Use PHP 8.3 image with Apache
+FROM php:8.3-apache
 
-# Install system dependencies for PostgreSQL support
+# Install necessary dependencies for PostgreSQL
 RUN apt-get update && apt-get install -y libpq-dev && apt-get clean
 
-# Install PHP extensions (pdo_pgsql and pgsql for PostgreSQL support)
+# Install PHP extensions (PDO, PDO_PGSQL, PGSQL)
 RUN docker-php-ext-install pdo pdo_pgsql pgsql
 
-# Enable Apache mod_rewrite
+# Enable Apache mod_rewrite for Laravel
 RUN a2enmod rewrite
 
-# Set the working directory in the container
+# Set the working directory inside the container
 WORKDIR /var/www/html
 
-# Copy the Laravel application into the container
+# Copy the application code into the container
 COPY . /var/www/html
 
-# Install Composer
+# Install Composer (Laravel's dependency manager)
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-# Install dependencies
+# Install PHP dependencies via Composer
 RUN composer install --no-interaction --prefer-dist
 
-# Set permissions (adjust based on your app's needs)
+# Set the correct permissions for the storage folder (write permissions)
 RUN chown -R www-data:www-data /var/www/html
 
-# Expose port 80
+# Expose port 80 for the web server
 EXPOSE 80
