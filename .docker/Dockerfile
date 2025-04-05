@@ -23,7 +23,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 RUN composer install --no-interaction --prefer-dist
 
 # Set the correct permissions for the storage folder (write permissions)
-RUN chown -R www-data:www-data /var/www/html
+RUN chown -R www-data:www-data /var/www/html && \
+    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Expose port 80 for the web server
 EXPOSE 80
+
+# Ensure Apache runs as the default entrypoint
+CMD ["apache2-foreground"]
