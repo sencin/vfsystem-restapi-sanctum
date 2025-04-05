@@ -27,12 +27,15 @@ COPY . /var/www/html
 # Install Composer (Laravel's dependency manager)
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
+# Set the correct permissions for the storage and cache folders (write permissions)
+RUN sudo chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN sudo chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
 # Install PHP dependencies via Composer (run as non-root user)
 RUN composer install --no-interaction --prefer-dist
 
 # Set the correct permissions for the storage folder (write permissions)
-RUN chown -R www-data:www-data /var/www/html && \
-    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN sudo chown -R www-data:www-data /var/www/html
 
 # Expose port 80 for the web server
 EXPOSE 80
