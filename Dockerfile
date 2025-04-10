@@ -1,7 +1,5 @@
-# Use PHP 8.3 image with Apache
 FROM php:8.3-apache
 
-# Install necessary dependencies for PostgreSQL
 RUN apt-get update && apt-get install -y libpq-dev git unzip && apt-get clean
 
 # Install PHP extensions (PDO, PDO_PGSQL, PGSQL)
