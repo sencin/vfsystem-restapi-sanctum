@@ -41,19 +41,22 @@ class UserAuth extends Controller{
             return response()->json(['errors' => $e->errors()], 422);
         }
     }
-    public function login(LoginUserRequest $request){
+    public function loginWeb(LoginUserRequest $request){
         try {
             $fields = $request->validated();
-
-              if (CheckRequestHeaderService::checkRequestHeader($request)){
-                $credentials = $this->authService->validateSanctumCredential($fields['email'], $fields['password']);
-                return response()->json([ 'message' => 'User Authenticated','token' => $credentials['token']], 200);
-              }
-
             $this->authService->validateAuthCredential($fields['email'], $fields['password']);
             $request->session()->regenerate();
             return response()->json(['message' => 'Authenticated'], 200);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 401);
+        }
+    }
 
+    public function loginToken(LoginUserRequest $request){
+        try {
+            $fields = $request->validated();
+            $credentials = $this->authService->validateSanctumCredential($fields['email'], $fields['password']);
+            return response()->json([ 'message' => 'User Authenticated','token' => $credentials['token']], 200);
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 401);
         }

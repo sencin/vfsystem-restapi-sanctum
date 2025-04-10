@@ -41,6 +41,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::post('/register', [UserAuth::class,'register']);
-Route::post('/login',[UserAuth::class,'login']);
+Route::post('/login',[UserAuth::class,'loginToken']);
 Route::post('/logout',[UserAuth::class,'logout'])->middleware('auth:sanctum');
 Route::get('/average_readings', [ReadingController::class, 'getAverageReadings']);
