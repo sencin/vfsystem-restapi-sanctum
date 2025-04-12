@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://uepverticalfarming.pages.dev', 'https://uepverticalfarming.vercel.app'],
+    'allowed_origins' => ['https://uepverticalfarming.pages.dev', 'https://uepverticalfarming.vercel.app', 'http://localhost:5173','http://localhost:4173'],
 
     'allowed_origins_patterns' => [],
 
