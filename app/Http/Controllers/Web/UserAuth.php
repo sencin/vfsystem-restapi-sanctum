@@ -56,7 +56,13 @@ class UserAuth extends Controller{
         try {
             $fields = $request->validated();
             $credentials = $this->authService->validateSanctumCredential($fields['email'], $fields['password']);
-            return response()->json([ 'message' => 'User Authenticated','token' => $credentials['token']], 200);
+            return response()->json(
+                [ 'message' => 'User Authenticated',
+                'token' => $credentials['token'],
+                'first_name'=> $credentials['user']['first_name'],
+                'last_name'=> $credentials['user']['last_name'],
+                'role'=> $credentials['user']['role'],
+                ],  200);
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 401);
         }
