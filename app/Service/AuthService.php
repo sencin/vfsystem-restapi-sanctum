@@ -48,9 +48,7 @@
 
     public function validateSanctumCredential(string $email, string $password){
       $account = $this->validateUser($email, $password);
-
-      $account->tokens()->delete();
-      $token = $account->createToken($account->first_name);
+      $token = $account->createToken($account->email);
       return ['token' => $token->plainTextToken, 'user'=>$account];
     }
  }
