@@ -71,7 +71,7 @@ class UserAuth extends Controller{
     public function logout(Request $request){
 
         if ($request->header('Accept') === 'application/json'){
-            $request->user()->tokens()->delete();
+            $request->user()->currentAccessToken()->delete();
             return response()->json(['message' => 'User logged out'], 200);
         }
 
