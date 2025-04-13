@@ -26,7 +26,7 @@ class UserAuth extends Controller{
         $this->fileManagerService = $fileManagerService;
     }
     public function index(){
-        return (Auth::check()) ? redirect('/dashboard'):view('login.login');
+        return (Auth::check()) ? redirect('/dashboard'): view('page.login');
     }
     public function register(RegisterUserRequest $request) {
         try {
@@ -81,6 +81,6 @@ class UserAuth extends Controller{
         return redirect('/');
     }
     public function registerUser(){
-        return (Auth::check()) ? redirect('/dashboard'):view('login.register');
+        return (Auth::check()) ? redirect('/dashboard'): view('page.register');
     }
 }
