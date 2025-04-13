@@ -38,7 +38,7 @@ Route::get('/availabletowers', [TowerController::class, 'showAllTowers']);
 
 Route::get('/user', function (Request $request) {
     return $request->user();
-})->middleware('auth:sanctum');
+})->middleware(['auth:sanctum', 'check.token.expiration']);
 
 Route::post('/register', [UserAuth::class,'register']);
 Route::post('/login',[UserAuth::class,'loginToken']);
