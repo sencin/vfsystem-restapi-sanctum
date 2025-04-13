@@ -59,6 +59,7 @@ class UserAuth extends Controller{
             return response()->json(
                 [ 'message' => 'User Authenticated',
                 'token' => $credentials['token'],
+                'user_id'=> $credentials['user']['user_id'],
                 'first_name'=> $credentials['user']['first_name'],
                 'last_name'=> $credentials['user']['last_name'],
                 'role'=> $credentials['user']['role'],
