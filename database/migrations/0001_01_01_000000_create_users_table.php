@@ -62,6 +62,21 @@ return new class extends Migration
             'updated_at' => now(),
         ]);
         $admin1->save();
+
+        $admin2 = new User([
+            'user_id' => 2,
+            'first_name' => 'Juan',
+            'last_name' => 'Dela Cruz',
+            'email' => 'juan@gmail.com',
+            'password' => Hash::make('00000000'),
+            'status'=> 'active',
+            'role'=>'admin',
+            'phone_number'=> '09641732812',
+            'gender' => 'male',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        $admin2->save();
     }
 
     /**
