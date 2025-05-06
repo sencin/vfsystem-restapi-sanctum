@@ -53,7 +53,7 @@ return new class extends Migration
             'first_name' => 'Admin',
             'last_name' => 'Admin',
             'email' => 'superadmin@gmail.com',
-            'password' => Hash::make('150169226'),
+            'password' => Hash::make('00000000'),
             'status'=> 'active',
             'role'=>'superadmin',
             'phone_number'=> '09641732812',
