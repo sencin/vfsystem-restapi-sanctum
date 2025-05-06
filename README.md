@@ -1,66 +1,118 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📘 API Documentation
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Welcome to the API documentation for your automated farming backend. Below you'll find grouped and well-structured endpoints with descriptions and controller mappings.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<details>
+<summary>📡 <strong>Tower Endpoints</strong></summary>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+| Method | Endpoint               | Description         | Controller                        |
+|--------|------------------------|---------------------|-----------------------------------|
+| GET    | `/api/availabletowers` | List all towers     | `Api\TowerController@showAllTowers` |
+| GET    | `/api/getTowerId`      | Get tower ID        | `Api\ReadingController@getTowerId`   |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+</details>
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+<details>
+<summary>📊 <strong>Reading Endpoints</strong></summary>
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+| Method     | Endpoint                | Description               | Controller                            |
+|------------|-------------------------|---------------------------|---------------------------------------|
+| GET        | `/api/readings`         | List all readings         | `Api\ReadingController@index`         |
+| POST       | `/api/readings`         | Store a new reading       | `Api\ReadingController@store`         |
+| GET        | `/api/readings/{id}`    | Get specific reading      | `Api\ReadingController@show`          |
+| PUT/PATCH  | `/api/readings/{id}`    | Update specific reading   | `Api\ReadingController@update`        |
+| DELETE     | `/api/readings/{id}`    | Delete a reading          | `Api\ReadingController@destroy`       |
+| GET        | `/api/average_readings` | Get average sensor data   | `Api\ReadingController@getAverageReadings` |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+</details>
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+<details>
+<summary>🌿 <strong>Plant Information</strong></summary>
 
-### Premium Partners
+| Method     | Endpoint                          | Description               | Controller                                  |
+|------------|-----------------------------------|---------------------------|---------------------------------------------|
+| GET        | `/api/plantinformations`          | List plant info           | `Api\PlantInformationController@index`      |
+| POST       | `/api/plantinformations`          | Create plant info         | `Api\PlantInformationController@store`      |
+| GET        | `/api/plantinformations/{id}`     | View plant info           | `Api\PlantInformationController@show`       |
+| PUT/PATCH  | `/api/plantinformations/{id}`     | Update plant info         | `Api\PlantInformationController@update`     |
+| DELETE     | `/api/plantinformations/{id}`     | Delete plant info         | `Api\PlantInformationController@destroy`    |
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+</details>
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+<details>
+<summary>🧪 <strong>Plant Requirements</strong></summary>
 
-## Code of Conduct
+| Method     | Endpoint                          | Description                  | Controller                                 |
+|------------|-----------------------------------|------------------------------|--------------------------------------------|
+| GET        | `/api/plantrequirements`          | List requirements            | `Api\PlantRequirementController@index`     |
+| POST       | `/api/plantrequirements`          | Create requirement           | `Api\PlantRequirementController@store`     |
+| GET        | `/api/plantrequirements/{id}`     | View requirement             | `Api\PlantRequirementController@show`      |
+| PUT/PATCH  | `/api/plantrequirements/{id}`     | Update requirement           | `Api\PlantRequirementController@update`    |
+| DELETE     | `/api/plantrequirements/{id}`     | Delete requirement           | `Api\PlantRequirementController@destroy`   |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+</details>
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+<details>
+<summary>🔁 <strong>Plant Transplants</strong></summary>
 
-## License
+| Method     | Endpoint                           | Description              | Controller                                  |
+|------------|------------------------------------|--------------------------|---------------------------------------------|
+| GET        | `/api/planttransplants`            | List transplants         | `Web\PlantTransplantController@index`       |
+| POST       | `/api/planttransplants`            | Create transplant record | `Web\PlantTransplantController@store`       |
+| GET        | `/api/planttransplants/{id}`       | View transplant          | `Web\PlantTransplantController@show`        |
+| PUT/PATCH  | `/api/planttransplants/{id}`       | Update transplant        | `Web\PlantTransplantController@update`      |
+| DELETE     | `/api/planttransplants/{id}`       | Delete transplant        | `Web\PlantTransplantController@destroy`     |
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+</details>
+
+---
+
+<details>
+<summary>🔐 <strong>Authentication</strong></summary>
+
+| Method | Endpoint        | Description       | Controller              |
+|--------|-----------------|-------------------|-------------------------|
+| POST   | `/api/login`    | User login        | `Web\UserAuth@loginToken` |
+| POST   | `/api/logout`   | User logout       | `Web\UserAuth@logout`     |
+| POST   | `/api/register` | Register new user | `Web\UserAuth@register`   |
+
+</details>
+
+---
+
+<details>
+<summary>👤 <strong>User Management</strong></summary>
+
+| Method | Endpoint            | Description        | Controller                              |
+|--------|---------------------|--------------------|------------------------------------------|
+| GET    | `/api/pendingusers` | List pending users | `Web\UserController@getPendingUsersAPI`  |
+
+</details>
+
+---
+
+<details>
+<summary>📟 <strong>Sensor Endpoints</strong></summary>
+
+| Method | Endpoint       | Description      | Controller                          |
+|--------|----------------|------------------|-------------------------------------|
+| GET    | `/api/sensors` | List all sensors | `Api\SensorController@index`        |
+
+</details>
+
+---
+
+📅 **Last Updated:** May 2025  
+📍 **Maintainer:** `ICT - University of Eastern Philippines`  
+📦 **Version:** `v1.0.0`
+
