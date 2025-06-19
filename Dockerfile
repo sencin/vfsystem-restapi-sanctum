@@ -3,7 +3,7 @@ FROM php:8.3-apache
 RUN apt-get update && apt-get install -y libpq-dev git unzip && apt-get clean
 
 # Install PHP extensions (PDO, PDO_PGSQL, PGSQL)
-RUN docker-php-ext-install pdo pdo_pgsql pgsql
+RUN docker-php-ext-install pdo pdo_pgsql pgsql pdo_mysql
 
 # Enable Apache mod_rewrite for Laravel
 RUN a2enmod rewrite
