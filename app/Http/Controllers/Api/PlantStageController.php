@@ -19,10 +19,10 @@ class PlantStageController extends Controller
 
         preg_match_all("/'([^']+)'/", $enumValues[0]->Type, $matches);
 
-        return view('plantstage.create', [
+        return response()->json([
             'plantTransplant' => $plantTransplant,
             'enumValues' => $matches[1],
-        ]);
+        ], 200);
     }
     public function store(Request $request, PlantTransplant $planttransplant){
         $validated = $request->validate([
@@ -39,15 +39,6 @@ class PlantStageController extends Controller
             'data' => $plantStage,
         ], 201);
     }
-    public function edit(string $id, string $plantstageId){
-        $plantTransplant = PlantTransplant::findOrFail($id);
-        $plantStage = $plantTransplant->plantStages()->findOrFail($plantstageId);
-
-        return view('plantstage.edit', [
-            'plantTransplant' => $plantTransplant,
-            'plantStage' => $plantStage,
-        ]);
-    }
     public function update(Request $request, PlantTransplant $planttransplant, PlantStage $plantstage){
 
         $validated = $request->validate([
@@ -63,11 +54,13 @@ class PlantStageController extends Controller
         ], 201);
     }
     public function destroy($planttransplant, $plantstage){
-        $transplant = PlantTransplant::findOrFail($planttransplant);
-        $requirement = PlantStage::findOrFail($plantstage);
+        $requirement = PlantStage::where('id', $plantstage)
+                                ->where('plant_transplant_id', $planttransplant)
+                                ->firstOrFail();
         $requirement->delete();
-        return redirect()->route('planttransplants.show', $transplant->transplant_id)
-        ->with('success', 'Requirement updated successfully!');
+        return response()->json([
+            'message' => 'Requirement deleted'
+        ], 204);
     }
     public function updateStage(Request $request, PlantTransplant $planttransplant, PlantStage $plantstage)
     {
