@@ -7,7 +7,7 @@ use App\Http\Resources\TowerResource;
 use App\Models\Tower;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-
+Use Illuminate\Support\Facades\DB;
 class TowerController extends Controller
 {
     //
