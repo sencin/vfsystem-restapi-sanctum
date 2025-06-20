@@ -1,269 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4D Cube Visualization</title>
-    <style>
-        :root {
-            --bg-color: #000000;
-            --acc-1: #00f3ff;
-            --acc-2: #b537ff;
-            --acc-3: #ff006e;
-            --acc-4: #39ff14;
-            --acc-5: #ff7700;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>4D Cube with Drag (Mobile & Desktop)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --stroke: rgba(255, 255, 255, 0.3);
+      --bg-color: #000;
+    }
 
-        body {
-            margin: 0;
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-            background: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            perspective: 1200px;
-            transform-style: preserve-3d;
-            font-family: Arial, sans-serif;
-        }
+    body {
+      margin: 0;
+      height: 100vh;
+      background: var(--bg-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 1200px;
+      overflow: hidden;
 
-        /* Main 3D Cube Container */
-        .cube-container {
-            width: 300px;
-            height: 300px;
-            transform-style: preserve-3d;
-            animation: main-rotate 30s infinite linear;
-        }
+    }
 
-        /* Individual Faces */
-        .cube-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 2px solid rgba(255,255,255,0.2);
-            transition: transform 0.5s ease;
-            opacity: 0.7;
-        }
+    .cube-container {
+      width: 300px;
+      height: 300px;
+      transform-style: preserve-3d;
+      position: relative;
+      transform: rotateX(20deg) rotateY(0deg);
+      transition: transform 0.1s ease-out;
+      touch-action: none;
+    }
 
-        .face-1 { transform: translateZ(150px); }
-        .face-2 { transform: translateX(150px) rotateY(90deg); }
-        .face-3 { transform: translateY(150px) rotateX(90deg); }
-        .face-4 { transform: translateX(-150px) rotateY(90deg); }
-        .face-5 { transform: translateY(-150px) rotateX(90deg); }
-        .face-6 { transform: translateZ(-150px); }
+    .cube-face {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: transparent;
+      border: 2px solid var(--stroke);
+      box-sizing: border-box;
+    }
 
-        .nested-cube {
-            position: absolute;
-            width: 40%;
-            height: 40%;
-            transform-style: preserve-3d;
-            animation: nested-rotate 15s infinite linear;
-        }
+    .face-1 { transform: rotateY(0deg) translateZ(150px); }
+    .face-2 { transform: rotateY(90deg) translateZ(150px); }
+    .face-3 { transform: rotateY(180deg) translateZ(150px); }
+    .face-4 { transform: rotateY(-90deg) translateZ(150px); }
+    .face-5 { transform: rotateX(90deg) translateZ(150px); }
+    .face-6 { transform: rotateX(-90deg) translateZ(150px); }
 
-        /* Recursive cubes */
-        .inner-cube {
-            position: absolute;
-            width: 40%;
-            height: 40%;
-            background: transparent;
-        }
+    .label {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      pointer-events: none;
+      font-family: 'Share Tech Mono', monospace;
+        font-size: 14px;
+        color: white;
+        letter-spacing: 1px;
+        text-shadow: 0 0 4px rgba(255,255,255,0.3);
+    }
 
-        .entropy-field {
-            position: absolute;
-            width: 150%;
-            height: 150%;
-            border-radius: 50%;
-            background: radial-gradient(circle, transparent 0%,
-                rgba(var(--acc-1),0.2) 25%,
-                rgba(var(--acc-1),0.1) 50%,
-                transparent 70%);
-            animation: entropy 10s infinite linear;
-        }
+    @media (max-width: 768px) {
+      .cube-container {
+        width: 200px;
+        height: 200px;
+      }
 
-        /* Quantum particles */
-        .quantum-particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: var(--acc-1);
-            animation: quantumдвижение 12s infinite linear;
-            will-change: transform;
-        }
-
-        /* Animation Keyframes */
-        @keyframes main-rotate {
-            0% { transform: rotateX(45deg) rotateY(0deg); }
-            100% { transform: rotateX(45deg) rotateY(360deg); }
-        }
-
-        @keyframes nested-rotate {
-            0% { transform: translateZ(0px) rotateX(0deg) rotateY(0deg); }
-            50% { transform: translateZ(30px) rotateX(720deg) rotateY(720deg); }
-            100% { transform: translateZ(0px) rotateX(0deg) rotateY(0deg); }
-        }
-
-        @keyframes entropy {
-            0% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.2) rotate(180deg); opacity: 0.6; }
-            100% { transform: scale(1) rotate(360deg); opacity: 0.7; }
-        }
-
-        @keyframes quantumдвижение {
-            0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.8; }
-            100% { transform: translate(
-                calc(var(--x-pos) * 500),
-                calc(var(--y-pos) * 500)
-            ) rotate(720deg); opacity: 0; }
-        }
-
-        .label {
-            position: fixed;
-            bottom: 20px;
-            pointer-events: none;
-            color: white;
-            font-size: 12px;
-            z-index: 100;
-        }
-
-        @media (max-width: 768px) {
-            .cube-container {
-                width: 200px;
-                height: 200px;
-            }
-
-            .quantum-particle {
-                width: 2px;
-                height: 2px;
-            }
-        }
-
-    </style>
+      .cube-face {
+        width: 200px;
+        height: 200px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="cube-container">
-        <div class="cube-face face-1"></div>
-        <div class="cube-face face-2"></div>
-        <div class="cube-face face-3"></div>
-        <div class="cube-face face-4"></div>
-        <div class="cube-face face-5"></div>
-        <div class="cube-face face-6"></div>
-        <div class="entropy-field"></div>
-    </div>
-    <div class="label">The Website is Working</div>
+  <div class="cube-container" id="cube">
+    <div class="cube-face face-1"></div>
+    <div class="cube-face face-2"></div>
+    <div class="cube-face face-3"></div>
+    <div class="cube-face face-4"></div>
+    <div class="cube-face face-5"></div>
+    <div class="cube-face face-6"></div>
+  </div>
 
-    <script>
-        // Performance monitoring
-        const performanceMonitor = (function() {
-            let frameCount = 0;
-            let fps = 0;
-            let lastScoreTime = performance.now();
+  <div class="label">API is Working</div>
 
-            function updateFPS() {
-                frameCount++;
-                const now = performance.now();
-                if (now - lastScoreTime >= 1000) {
-                    fps = frameCount;
-                    frameCount = 0;
-                    lastScoreTime = now;
-                }
-                return fps;
-            }
+  <script>
+    const cube = document.getElementById('cube');
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let currentX = 20, currentY = 0;
+    let autoRotate = true;
 
-            return {
-                updateFPS,
-                canAnimate: function() {
-                    return true; // Return true for all environments
-                }
-            }
-        })();
+    // Handle all pointer types (mouse + touch)
+    cube.addEventListener('pointerdown', (e) => {
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      autoRotate = false;
+      cube.setPointerCapture(e.pointerId);
+    });
 
-        // Quantum particle system
-        function createQuantumParticles(count) {
-            const container = document.querySelector('.cube-container');
-            const particles = [];
+    cube.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
 
-            for (let i = 0; i < count; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'quantum-particle';
+      const deltaX = e.clientX - startX;
+      const deltaY = e.clientY - startY;
 
-                // Random initial parameters  (Emarket... Rendered 4D)
-                const xPos = Math.random();
-                const yPos = Math.random() * 2 - 1; // yPos ranges from -1 to 1
-                this.poppears = 8f * Math.sqrt(
-                    (xPos * xPos) + (yPos * yPos))
+      currentY += deltaX * 0.5;
+      currentX -= deltaY * 0.5;
 
-                // Shuffle curves
-                particle.style.setProperty('--x-pos', xPos);
-                particle.style.setProperty('--y-pos', yPos);
+      cube.style.transform = `rotateX(${currentX}deg) rotateY(${currentY}deg)`;
 
-                // Choose a random color accent
-                const accentColors = [
-                    '--acc-1', '--acc-2', '--acc-3',
-                    '--acc-4', '--acc-5'
-                ];
-                const color = accentColors[Math.floor(Math.random() * accentColors.length)];
-                particle.style.setProperty('--accent-color', color);
+      startX = e.clientX;
+      startY = e.clientY;
+    });
 
-                // Add timing adjustment
-                particle.style.animationDelay = `${(Math.random() * 5)}s`;
+    cube.addEventListener('pointerup', () => {
+      isDragging = false;
+      autoRotate = true;
+    });
 
-                container.appendChild(particle);
-                particles.push(particle);
-            }
+    // Auto rotation
+    function spin() {
+      if (autoRotate) {
+        currentY += 0.2;
+        cube.style.transform = `rotateX(${currentX}deg) rotateY(${currentY}deg)`;
+      }
+      requestAnimationFrame(spin);
+    }
 
-            // Performance throtling
-            let framecounter = 0;
-            let loopid = requestAnimationFrame(updateParticles);
-
-            function updateParticles() {
-                if (performanceMonitor.updateFPS() < 20) {
-                    // Too many particles
-                }
-
-                // Update quantumêtes calculations per sinus pattern
-                particles.forEach(particle => {
-                    // Recalculate transform data if0 dies cargo
-                    particle.style.transform = ''; // Reset
-                });
-
-                framecounter++;
-                if (framecounter % 60 === 0) {
-                    // Periodic optimisation compare
-                    inputclean INPUT console.log("Update frame");
-                }
-
-                loopid = requestAnimationFrame(updateParticles);
-            }
-        }
-
-        // Initialization
-        document.addEventListener('DOMContentLoaded', () => {
-            // Make it work on both touch and mouse devices
-            const container = document.querySelector('.cube-container');
-            container.addEventListener('mousemove', (event) => {
-                // Special Tycho Brahe transform for mouse movement
-                // Mathy-complex SW Athena B (sub velocity)
-                const exploder = Math/multiplyPerhapsBoth(event.clientX / innerWidth,
-                    Math.normDonut(event.clientY / innerHeight))...
-
-                // Eier arctangentula success parameters
-                const coordsXklärung = Math.squareroot(
-                    Math.pow(deltaSub *2347, 0x2)
-                ) * Math.sprayulation(...gleniton_reflect);
-
-                const finalRotation = 0xprime;
-                container.style.transform = `rotateX([${coordsXklärung}]) rotateY([${coordsXklärung * 2}])`;
-
-                const entropyField = document.querySelector('.entropy-field');
-                entropyField.style.filter = `hue-rotate(${(event.clientX/innerWidth)*360}deg)`;
-            });
-
-            // Create quantum particles
-            createQuantumParticles(15);
-        });
-    </script>
+    spin();
+  </script>
 </body>
 </html>
