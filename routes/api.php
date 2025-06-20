@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\Api\PlantHarvestController;
 use App\Http\Controllers\Api\PlantInformationController;
 use App\Http\Controllers\Api\PlantRequirementController;
 use App\Http\Controllers\Api\ReadingController;
@@ -8,11 +10,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\SensorController;
 use App\Http\Controllers\Api\TowerController;
 use App\Http\Controllers\Web\PlantTransplantController;
-use App\Http\Controllers\Web\UserAuth;
-use App\Http\Controllers\Web\UserController;
+use App\Http\Controllers\Api\UserAuth;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\FileController;
 
 Route::middleware('auth:sanctum')->group(function(){
+    Route::post('/logout',[UserAuth::class,'logout']);
+
     Route::get('/esp32websocketconfig',function(){
         return response()->json([
             'socketUrl'=> env('ESP32_CAMERA_WS')
@@ -25,7 +29,9 @@ Route::middleware('auth:sanctum')->group(function(){
         'sensors'           => SensorController::class,
         'towers'            => TowerController::class,
         'readings'          => ReadingController::class,
-        'planttransplants'  => PlantTransplantController::class
+        'planttransplants'  => PlantTransplantController::class,
+        'plantharvests'     => PlantHarvestController::class,
+        'users'             => UserController::class
     ]);
 
     Route::apiResource('plantinformations.plantrequirements', PlantRequirementController::class);
@@ -52,5 +58,4 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/register', [UserAuth::class,'register']);
 Route::post('/login',[UserAuth::class,'loginToken']);
-Route::post('/logout',[UserAuth::class,'logout'])->middleware('auth:sanctum');
 Route::get('/average_readings', [ReadingController::class, 'getAverageReadings']);
