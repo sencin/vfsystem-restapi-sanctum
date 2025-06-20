@@ -9,33 +9,32 @@ use Illuminate\Validation\ValidationException;
 use App\Models\PlantStage;
 use Illuminate\Support\Facades\Date;
 class PlantTransplantRepository{
-    
+
     public function getAllTransplant(){
 
     }
     public function getTransplantById(PlantTransplant $plantTransplant){
 
     }
-    public function createPlantTransplant(array $data) {
-      $transplant =  PlantTransplant::create($data);
-      $transplant->plantStages()->create(['plant_stage' => 'seedling']);
+    public function createPlantTransplant(array $data)
+    {
+        $transplant = PlantTransplant::create($data);
+        $transplant->plantStages()->create(['plant_stage' => 'seedling']);
 
-        return response()->json([
-            'message' => "Success. Plant is Being Monitored"
-        ], 200);
+        return $transplant; // or return true/false if you want only status
     }
 
-    public function updatePlantTransplant(array $data, PlantTransplant $plantTransplant){
-        try{
+    public function updatePlantTransplant(array $data, PlantTransplant $plantTransplant)
+    {
+        try {
             $plantTransplant->update($data);
-            return response()->json([
-                'message' => 'Plant Transplant Updated'
-            ], 200);
-        }
-        catch(ValidationException $e){
-
+            return true; // or return $plantTransplant if needed
+        } catch (ValidationException $e) {
+            // Optionally handle/log exception, or let it bubble up
+            return false;
         }
     }
+
     public function deletePlantTransplant(PlantTransplant $plantTransplant){
 
     }
