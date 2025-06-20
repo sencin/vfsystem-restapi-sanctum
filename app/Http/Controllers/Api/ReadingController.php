@@ -10,6 +10,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use DateTime;
 class ReadingController extends Controller{
 
     public function index(){
@@ -94,4 +95,54 @@ class ReadingController extends Controller{
 
         return response()->json($formattedResults);
     }
+
+    public function getSingleSensorAverages(Request $request)
+    {
+        $sensorId = (int) $request->query('sensor_id');
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+        $intervalHours = (int) $request->query('interval', 1); // Default 1 hour
+
+        // --- Input Validation ---
+        if (!$sensorId || !$startDate || !$endDate) {
+            return response()->json([
+                'error' => 'Parameters "sensor_id", "start_date", and "end_date" are required.'
+            ], 400);
+        }
+
+        try {
+            $start = new DateTime($startDate);
+            $end = new DateTime($endDate);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Invalid date format. Use "YYYY-MM-DD HH:MM:SS".'
+            ], 400);
+        }
+
+        // --- Execute Query ---
+        $results = DB::select("
+            SELECT
+                DATE_FORMAT(MIN(record_date), '%Y-%m-%d %H:00:00') AS reading_time,
+                ROUND(AVG(reading_value), 2) AS avg_reading
+            FROM readings
+            WHERE sensor_id = ?
+            AND record_date BETWEEN ? AND ?
+            GROUP BY DATE(record_date), FLOOR(HOUR(record_date) / ?)
+            ORDER BY MIN(record_date) ASC
+        ", [
+            $sensorId,
+            $start->format('Y-m-d H:i:s'),
+            $end->format('Y-m-d H:i:s'),
+            $intervalHours
+        ]);
+
+        // --- Format Output ---
+        $data = array_map(fn($row) => [
+            'reading_time' => $row->reading_time,
+            'avg_reading' => $row->avg_reading,
+        ], $results);
+
+        return response()->json($data);
+    }
+
 }
