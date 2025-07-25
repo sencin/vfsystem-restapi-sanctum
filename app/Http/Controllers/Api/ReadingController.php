@@ -145,4 +145,34 @@ class ReadingController extends Controller{
         return response()->json($data);
     }
 
+    public function getNewReadings(Request $request) {
+        $lastReadingId = $request->input('lastReadingId');
+        $towerId = $request->input('towerId');
+        $query = Reading::where('reading_id', '>', $lastReadingId);
+        if ($towerId) {
+            $query = $query->whereHas('sensor', function ($query) use ($towerId) {
+                $query->where('tower_id', $towerId);
+            });
+        }
+        $newReadings = $query->with('sensor')
+                             ->orderBy('reading_id', 'desc')
+                             ->take(50)
+                             ->get()
+                             ->reverse();
+
+        $newReadings = $newReadings->map(function($reading) {
+            return [
+                'reading_id' => $reading->reading_id,
+                'reading_value' => $reading->reading_value,
+                'record_date' => $reading->record_date,
+                'tower_id' => $reading->sensor->tower_id,
+                'sensor_name' => $reading->sensor->sensor_name
+            ];
+        });
+
+        if ($newReadings->isNotEmpty()) {
+            return response()->json($newReadings->values()->toArray());
+        }
+        return response()->json(['message' => 'No new readings available.', 'lastFetchedId' => $lastReadingId], 204);
+    }
 }

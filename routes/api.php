@@ -60,3 +60,4 @@ Route::post('/register', [UserAuth::class,'register']);
 Route::post('/login',[UserAuth::class,'loginToken']);
 Route::get('/average_readings', [ReadingController::class, 'getAverageReadings']);
 Route::get('/sensor/average', [ReadingController::class, 'getSingleSensorAverages']);
+Route::get('/chart/readings', [ReadingController::class,'getNewReadings']);
