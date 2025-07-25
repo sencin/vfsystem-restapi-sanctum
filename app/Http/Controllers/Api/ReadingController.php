@@ -11,6 +11,7 @@ use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use DateTime;
+use Illuminate\Support\Facades\Log; 
 class ReadingController extends Controller{
 
     public function index(){
@@ -58,41 +59,76 @@ class ReadingController extends Controller{
        }
     }
 
-    public function getAverageReadings(Request $request)
+        public function getAverageReadings(Request $request)
     {
-        $startDate = $request->query('start_date', '2025-01-01'); // Default start date
-        $endDate = $request->query('end_date', '2025-01-21'); // Default end date
+        // --- 1. Validate and Retrieve Parameters ---
+        // Expect 'month' (1-12) and 'year' (e.g., 2025)
+        // Set defaults if not provided, or make them strictly required with a 400 response.
+        // For dynamic month navigation, making them required is better.
+        $month = (int) $request->query('month');
+        $year = (int) $request->query('year');
+        $intervalHours = (int) $request->query('interval', 1); // Default to 1 hour if not specified
 
-        // Query to calculate daily average per sensor
+        // Basic validation for month and year
+        if (!$month || $month < 1 || $month > 12 || !$year) {
+            Log::warning("Invalid or missing 'month' or 'year' parameter for average readings.");
+            return response()->json([
+                'error' => 'Valid "month" (1-12) and "year" are required parameters.'
+            ], 400);
+        }
+
+        // --- 2. Calculate Start and End Dates for the Specified Month ---
+        // Use DateTime objects for robust date calculations
+        try {
+            // First day of the specified month
+            $dtStart = new DateTime("{$year}-{$month}-01 00:00:00");
+            $startDate = $dtStart->format('Y-m-d H:i:s'); // Format for SQL
+
+            // Last day of the specified month, including the last second
+            $dtEnd = new DateTime("{$year}-{$month}-01 00:00:00");
+            $dtEnd->modify('+1 month'); // Go to the first day of the next month
+            $dtEnd->modify('-1 second'); // Subtract one second to get to the end of the current month
+            $endDate = $dtEnd->format('Y-m-d H:i:s'); // Format for SQL
+
+        } catch (\Exception $e) {
+            Log::error("Date calculation error for month {$month}, year {$year}: " . $e->getMessage());
+            return response()->json(['error' => 'Failed to calculate date range for the specified month.'], 500);
+        }
+
+        // Log received parameters and calculated range for debugging
+        Log::info("API Request: Averaged Readings for Month {$month}, Year {$year}. Calculated range: {$startDate} to {$endDate}, interval {$intervalHours} hours.");
+
+        // --- 3. Build and Execute SQL Query ---
         $results = DB::select("
             SELECT
-                DATE(record_date) AS reading_date,
                 sensor_id,
+                DATE_FORMAT(MIN(record_date), '%Y-%m-%d %H:00:00') AS reading_time,
                 ROUND(AVG(reading_value), 2) AS avg_reading
             FROM readings
-            WHERE record_date BETWEEN ? AND ?
-            GROUP BY reading_date, sensor_id
-            ORDER BY reading_date ASC
-        ", [$startDate, $endDate]);
+            WHERE record_date >= ? AND record_date <= ? -- Filter by the calculated month range
+            GROUP BY sensor_id, DATE(record_date), FLOOR(HOUR(record_date) / ?)
+            ORDER BY MIN(record_date) ASC -- Ensure chronological order
+        ", [$startDate, $endDate, $intervalHours]); // Pass the parameters as bindings
 
-        // ✅ Corrected sensor mappings
+        // --- 4. Sensor Mappings ---
         $sensorNames = [
             1 => 'Temperature_DHT11',
             2 => 'Humidity_DHT11',
-            3 => 'Analog_PH',        // ✅ Now correctly mapped
-            4 => 'TDS_Meter',        // ✅ Now correctly mapped
-            5 => 'TSL2561_Luminosity', // ✅ Correct Luminosity mapping
+            3 => 'Analog_PH',
+            4 => 'TDS_Meter',
+            5 => 'TSL2561_Luminosity',
         ];
 
-        // Format results
+        // --- 5. Format Results for JSON Output ---
         $formattedResults = array_map(function ($result) use ($sensorNames) {
             return [
-                'reading_date' => $result->reading_date,
+                'reading_time' => $result->reading_time, // e.g., "2025-01-16 01:00:00"
                 'sensor_name' => $sensorNames[$result->sensor_id] ?? 'Unknown Sensor',
                 'avg_reading' => $result->avg_reading,
             ];
         }, $results);
 
+        Log::info("API Response: Returning " . count($formattedResults) . " average readings for Month {$month}, Year {$year}.");
         return response()->json($formattedResults);
     }
 
@@ -175,4 +211,5 @@ class ReadingController extends Controller{
         }
         return response()->json(['message' => 'No new readings available.', 'lastFetchedId' => $lastReadingId], 204);
     }
+
 }
